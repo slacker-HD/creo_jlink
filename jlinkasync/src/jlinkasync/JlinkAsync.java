@@ -5,7 +5,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 
+import com.ptc.cipjava.*;
+import com.ptc.pfc.pfcSession.*;
+import com.ptc.pfc.pfcAsyncConnection.*;
+
 public class JlinkAsync {
+
     private JFrame jFrame = new JFrame("Jlink异步测试");
     private Container mainContainer = jFrame.getContentPane();
 
@@ -14,6 +19,9 @@ public class JlinkAsync {
 
     private JButton btn_new = new JButton("启动新回话");
     private JButton btn_quit = new JButton("结束会话并退出");
+
+    private static Session currSession;
+    private AsyncConnection ac;
 
     public JlinkAsync() {
         jFrame.setBounds(600, 200, 700, 160);
@@ -47,9 +55,11 @@ public class JlinkAsync {
         btn_new.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
                 try {
-
-                } catch (Exception e) {
-                    JOptionPane.showMessageDialog(mainContainer, e.getMessage(), "错误", JOptionPane.WARNING_MESSAGE);
+                    ac = pfcAsyncConnection.AsyncConnection_Start(jf_apppath.getText(), null);
+                    currSession = ac.GetSession();
+                    currSession.UIShowMessageDialog("利用异步程序启动了对话。", null);
+                } catch (jxthrowable e) {
+                    e.printStackTrace();
                 }
             }
         });
@@ -57,7 +67,7 @@ public class JlinkAsync {
         btn_quit.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
                 try {
-
+                    ac.End();
                 } catch (Exception e) {
                     JOptionPane.showMessageDialog(mainContainer, e.getMessage(), "错误", JOptionPane.WARNING_MESSAGE);
                 }
@@ -67,6 +77,7 @@ public class JlinkAsync {
     }
 
     public static void main(String[] args) throws Exception {
+        System.loadLibrary("pfcasyncmt");
         new JlinkAsync();
     }
 
