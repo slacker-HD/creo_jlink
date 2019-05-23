@@ -69,7 +69,7 @@ public class JlinkAsync {
                 try {
                     ac.End();
                 } catch (Exception e) {
-                    JOptionPane.showMessageDialog(mainContainer, e.getMessage(), "错误", JOptionPane.WARNING_MESSAGE);
+                    e.printStackTrace();
                 }
                 System.exit(0);
             }
